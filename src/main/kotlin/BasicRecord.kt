@@ -1,5 +1,1 @@
-abstract class BasicRecord {
-    abstract val name: String
-    abstract fun validate(): Boolean
-
-}
+abstract class BasicRecord(open val name: String)

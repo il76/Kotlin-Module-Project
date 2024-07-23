@@ -1,8 +1,5 @@
-data class Archive(override val name: String): BasicRecord() {
+data class Archive(override val name: String): BasicRecord(name) {
     val notesList: ArrayList<Note> = ArrayList()
-    override fun validate(): Boolean {
-        return name.isNotEmpty()
-    }
 
     companion object {
         const val CREATE = "архив"

@@ -3,6 +3,9 @@ import java.util.Scanner
 
 
 class Menu {
+    /**
+     * Пункты меню на текущем уровне вложенности
+     */
     val actions: MutableMap<Int, String> = mutableMapOf()
 
     /**
@@ -31,21 +34,20 @@ class Menu {
      */
     fun createEntries(list: ArrayList<out BasicRecord>, entryType: String) {
         actions.clear()
-        actions.put(0, "Создать $entryType")
-        var i = 0;
-        for (item in list) {
-            //println(item)
-            actions.put(++i, item.name)
+        actions[0] = "Создать $entryType"
+        for ((i, item) in list.withIndex()) {
+            actions[i + 1] = item.name
         }
-        actions.put(actions.size, "Выход")
+        actions[actions.size] = "Выход"
     }
 
     /**
-     * Вывод меню на экра
+     * Вывод меню на экран
      */
     fun printActions() {
         for ((item, action) in actions) {
             println("$item. $action")
         }
+        println("Выберите пункт меню [0..${actions.size-1}]")
     }
 }

@@ -3,13 +3,26 @@ fun main(args: Array<String>) {
     println("Выберите пункт меню для начала работы")
     val menu = Menu()
     val archivesList: ArrayList<Archive> = ArrayList()
+
+    /**
+     * Что ввёл польлзователь?
+     */
     var userInput: Int
+
+    /**
+     * запоминаем выбранный архив
+     */
     var curArchiveNum = 0
 
-    menu.createEntries(archivesList, Archive.CREATE)
-
-
     while (true) {
+        if (menu.currentLevel == 0) {
+            println("\nГлавное меню. Список архивов")
+            menu.createEntries(archivesList, Archive.CREATE)
+        } else {
+            val archive = archivesList[curArchiveNum]
+            println("\nПросмотр архива \"${archive.name}\"")
+            menu.createEntries(archive.notesList, Note.CREATE)
+        }
         menu.printActions()
         try {
             userInput = menu.readMenuInput()
@@ -45,23 +58,18 @@ fun main(args: Array<String>) {
                 if (content.isEmpty()) {
                     println("Содержимое $text не может быть пустым")
                 } else {
-                    archivesList.get(curArchiveNum).notesList.add(Note(name, content))
-                    menu.createEntries(archivesList.get(curArchiveNum).notesList, Note.CREATE)
+                    archivesList[curArchiveNum].notesList.add(Note(name, content))
                 }
             } else if (!failedValidation) {
                 archivesList.add(Archive(name))
-                menu.createEntries(archivesList, Archive.CREATE)
             }
         } else { //просмотр
-            if (menu.currentLevel == 0) {
+            if (menu.currentLevel == 0) { //вход в архив
                 curArchiveNum = userInput - 1
-                val archive = archivesList.get(curArchiveNum)
-                println("\nПросмотр архива \"${archive.name}\"")
-                menu.createEntries(archive.notesList, Note.CREATE)
                 menu.currentLevel++
-            } else {
-                val note = archivesList.get(curArchiveNum).notesList.get(userInput-1)
-                println("Просмотр заметки № $userInput из архива "+archivesList.get(curArchiveNum).name)
+            } else { // просмотр заметки
+                val note = archivesList[curArchiveNum].notesList[userInput-1]
+                println("Просмотр заметки № $userInput из архива "+ archivesList[curArchiveNum].name)
                 println("Название: \n${note.name}")
                 println("Содержание: \n${note.content}")
             }
